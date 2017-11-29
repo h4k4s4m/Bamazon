@@ -6,6 +6,7 @@
   "author": "Sahm Samarghandi <h4k4s4m@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "inquirer": "^4.0.0",
     "mysql": "^2.15.0"
   }
 }
