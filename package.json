@@ -1,0 +1,11 @@
+{
+  "name": "Bamazon",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:h4k4s4m/Bamazon.git",
+  "author": "Sahm Samarghandi <h4k4s4m@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "mysql": "^2.15.0"
+  }
+}
