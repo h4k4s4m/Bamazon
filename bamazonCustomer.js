@@ -1,5 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var productSelected = '';
+var productQuant = 0;
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -13,7 +15,14 @@ var connection = mysql.createConnection({
     database: "bamazon"
 });
 
-displayStore();
+//check if there are connection errors
+connection.connect(function (err) {
+    if (err) {
+        console.error("error connecting: " + err.stack);
+    }
+    displayStore();
+});
+
 
 function displayStore() {
     connection.query("SELECT * FROM products", function (err, res) {
@@ -22,14 +31,16 @@ function displayStore() {
         console.log("_____________________________________________________________________");
         for (var x in res) {
             console.log(res[x].item_id + " : " + res[x].product_name + " : $" + res[x].price + " Quantity : " + res[x].stock_quantity);
+            productSelected = res[x].product_name;
+            productQuant = res[x].stock_quantity;
         }
         console.log("_____________________________________________________________________\n\n\n");
-        buy();
+        buy(res);
     });
 }
 
 
-function buy() {
+function buy(res) {
     inquirer
         .prompt([{
                 type: "input",
@@ -47,18 +58,15 @@ function buy() {
                 item_id: response.ID
             }, function (err, res) {
                 if (err) throw err;
-                if ((response.stock_quantity - response.qant) < 0) {
+                if ((productQuant - response.qant) < 0) {
                     console.log("I don't think so, pal");
                 } else {
-                    connection.query("Update pruducts set ? where ?"), {
-                        stock_quantity: ("stockquantity -" + response.quant),
-                        item_id: response.id
-                    }
+                    connection.query("Update products set stock_quantity=stock_quantity- ? WHERE item_id= ?", [response.quant, response.ID]);
+                    console.log("\nSuccessfully purchased " + response.quant + " of " + productSelected + "\n");
+                    displayStore();
                 }
 
             });
-            displayStore();
-
         });
 
 }
