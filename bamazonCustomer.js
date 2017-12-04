@@ -58,8 +58,10 @@ function buy(res) {
                 item_id: response.ID
             }, function (err, res) {
                 if (err) throw err;
-                if ((productQuant - response.qant) < 0) {
-                    console.log("I don't think so, pal");
+                var z = (productQuant - response.quant)
+                if (z < 0) {
+                    console.log("\nI don't think so, pal\n");
+                    displayStore();
                 } else {
                     connection.query("Update products set stock_quantity=stock_quantity- ? WHERE item_id= ?", [response.quant, response.ID]);
                     console.log("\nSuccessfully purchased " + response.quant + " of " + productSelected + "\n");
